@@ -1,0 +1,302 @@
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='$#,##0.00;($#,##0.00)';
+SET TimeFormat='h:mm:ss TT';
+SET DateFormat='M/D/YYYY';
+SET TimestampFormat='M/D/YYYY h:mm:ss[.fff] TT';
+SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
+SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
+SET LongMonthNames='January;February;March;April;May;June;July;August;September;October;November;December';
+SET LongDayNames='Monday;Tuesday;Wednesday;Thursday;Friday;Saturday;Sunday';
+SET FirstWeekDay=0;
+SET BrokenWeeks=1;
+SET ReferenceDay=0;
+SET FirstMonthOfYear=1;
+SET CollationLocale='en-US';
+
+//Facts
+//1
+'Death Records':
+LOAD Id , 
+     ResidentStatus, 
+     Education1989Revision as Educ1989, 
+     Education2003Revision as Educ2003, 
+     EducationReportingFlag as EduFlag, 
+     MonthOfDeath, 
+     Sex, 
+     AgeType, 
+     Age, 
+     AgeSubstitutionFlag, 
+     AgeRecode52, 
+     AgeRecode27, 
+     AgeRecode12, 
+     InfantAgeRecode22, 
+     PlaceOfDeathAndDecedentsStatus, 
+     MaritalStatus, 
+     DayOfWeekOfDeath, 
+     CurrentDataYear, 
+     InjuryAtWork, //No Dimension
+     MannerOfDeath, 
+     MethodOfDisposition, 
+     
+     Autopsy, 
+     ActivityCode, 
+     PlaceOfInjury, 
+     Icd10Code, 
+     CauseRecode358, //No Dimension
+     CauseRecode113, //No Dimension
+     InfantCauseRecode130, 
+     CauseRecode39, 
+     NumberOfEntityAxisConditions, 
+     NumberOfRecordAxisConditions, 
+     Race, 
+     BridgedRaceFlag, 
+     RaceImputationFlag, 
+     RaceRecode3, 
+     RaceRecode5, 
+     HispanicOrigin, 
+     HispanicOriginRaceRecode
+SQL SELECT *
+FROM DeathRecords;
+
+Concatenate
+//EntityAxisConditions
+LOAD //Id, 
+     DeathRecordId, 
+     Part, 
+     Line, 
+     Sequence
+     //Icd10Code
+SQL SELECT *
+FROM EntityAxisConditions;
+
+Concatenate
+
+LOAD 
+//Id, 
+DeathRecordId ;
+//Icd10Code;
+SQL SELECT *
+FROM RecordAxisConditions;
+
+
+
+//Dimensions
+
+//1
+'Hispanic Origin Race Recode':
+QUALIFY *;
+UNQUALIFY HispanicOriginRaceRecode;
+LOAD Code as HispanicOriginRaceRecode, 
+     Description;
+SQL SELECT *
+FROM HispanicOriginRaceRecode;
+
+//2
+'Resident Status':
+QUALIFY *;
+UNQUALIFY ResidentStatus;
+LOAD Code as ResidentStatus, 
+     Description;
+SQL SELECT *
+FROM ResidentStatus;
+
+//3
+'Education 1989':
+QUALIFY *;
+UNQUALIFY Educ1989;
+LOAD Code as Educ1989, 
+     Description;
+SQL SELECT *
+FROM Education1989Revision;
+
+//4
+'Education 2003':
+QUALIFY *;
+UNQUALIFY Educ2003;
+LOAD Code as Educ2003, 
+     Description;
+SQL SELECT *
+FROM Education2003Revision;
+
+//5
+'Education Report':
+QUALIFY *;
+UNQUALIFY EduFlag;
+LOAD Code as EduFlag, 
+     Description;
+SQL SELECT *
+FROM EducationReportingFlag;
+
+//6
+'Age Type':
+QUALIFY *;
+UNQUALIFY AgeType;
+LOAD Code as AgeType, 
+     Description;
+SQL SELECT *
+FROM AgeType;
+
+//7
+'Age Recode 52':
+QUALIFY *;
+UNQUALIFY AgeRecode52;
+LOAD Code as AgeRecode52, 
+     Description;
+SQL SELECT *
+FROM AgeRecode52;
+
+//8
+'Age Recode 27':
+QUALIFY *;
+UNQUALIFY AgeRecode27;
+LOAD Code as AgeRecode27, 
+     Description;
+SQL SELECT *
+FROM AgeRecode27;
+
+//9
+'Age Recode 12':
+QUALIFY *;
+UNQUALIFY AgeRecode12;
+LOAD Code as AgeRecode12, 
+     Description;
+SQL SELECT *
+FROM AgeRecode12;
+
+//10
+'Infant Age 22':
+QUALIFY *;
+UNQUALIFY InfantAgeRecode22;
+LOAD Code as InfantAgeRecode22, 
+     Description;
+SQL SELECT *
+FROM InfantAgeRecode22;
+
+//11
+'Death Place':
+QUALIFY *;
+UNQUALIFY PlaceOfDeathAndDecedentsStatus;
+LOAD Code as PlaceOfDeathAndDecedentsStatus, 
+     Description;
+SQL SELECT *
+FROM PlaceOfDeathAndDecedentsStatus;
+
+//12
+'Marital Status':
+QUALIFY *;
+UNQUALIFY MaritalStatus;
+LOAD Code as MaritalStatus, 
+     Description;
+SQL SELECT *
+FROM MaritalStatus;
+
+//13
+'Death Day':
+QUALIFY *;
+UNQUALIFY DayOfWeekOfDeath;
+LOAD Code as DayOfWeekOfDeath, 
+     Description;
+SQL SELECT *
+FROM DayOfWeekOfDeath;
+
+//14
+//'Injury At Work':
+'Manner of Death':
+QUALIFY *;
+UNQUALIFY MannerOfDeath;
+LOAD Code as MannerOfDeath, 
+     Description;
+SQL SELECT *
+FROM MannerOfDeath;
+
+//15
+'Method Of Disposition':
+QUALIFY *;
+UNQUALIFY MethodOfDisposition;
+LOAD Code as MethodOfDisposition, 
+     Description;
+SQL SELECT *
+FROM MethodOfDisposition;
+
+//16
+'Activity Code':
+QUALIFY *;
+UNQUALIFY ActivityCode;
+LOAD Code as ActivityCode, 
+     Description;
+SQL SELECT *
+FROM ActivityCode;
+
+//17
+'Place Of Injury':
+QUALIFY *;
+UNQUALIFY PlaceOfInjury;
+LOAD Code as PlaceOfInjury, 
+     Description;
+SQL SELECT *
+FROM PlaceOfInjury;
+
+//18
+'Icd 10 Code':
+QUALIFY *;
+UNQUALIFY Icd10Code;
+LOAD Code as Icd10Code, 
+     Description;
+SQL SELECT *
+FROM Icd10Code;
+
+//19
+'Race':
+QUALIFY *;
+UNQUALIFY Race;
+LOAD Code as Race, 
+     Description;
+SQL SELECT *
+FROM Race;
+//20
+'Bridged Race Flag':
+QUALIFY *;
+UNQUALIFY BridgedRaceFlag;
+LOAD Code as BridgedRaceFlag, 
+     Description;
+SQL SELECT *
+FROM BridgedRaceFlag;
+
+//21
+'RaceImputationFlag':
+QUALIFY *;
+UNQUALIFY RaceImputationFlag;
+LOAD Code as RaceImputationFlag, 
+     Description;
+SQL SELECT *
+FROM RaceImputationFlag;
+
+//22
+'Race Recode 3':
+QUALIFY *;
+UNQUALIFY RaceRecode3;
+LOAD Code as RaceRecode3, 
+     Description;
+SQL SELECT *
+FROM RaceRecode3;
+
+//23
+'Race Recode 5':
+QUALIFY *;
+UNQUALIFY RaceRecode5;
+LOAD Code as RaceRecode5, 
+     Description;
+SQL SELECT *
+FROM RaceRecode5;
+
+//24
+'Hispanic Origin':
+QUALIFY *;
+UNQUALIFY HispanicOrigin;
+LOAD Code as HispanicOrigin, 
+     Description;
+SQL SELECT *
+FROM HispanicOrigin;
